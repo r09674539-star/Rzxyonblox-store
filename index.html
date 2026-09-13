@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RZXYONBLOX Store</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#080808;color:#fff}a{text-decoration:none;color:inherit}
+header{position:sticky;top:0;background:#090909ee;backdrop-filter:blur(8px);border-bottom:1px solid #292929;padding:16px 6%;display:flex;justify-content:space-between;align-items:center;z-index:5}.logo{font-weight:900;font-size:21px}.logo span{color:#e51b2b}.cart{background:#151515;color:#fff;border:1px solid #333;border-radius:10px;padding:10px 14px}
+.hero{min-height:560px;padding:90px 8%;display:flex;align-items:center;background:radial-gradient(circle at 80% 35%,#610b14,#210508 27%,#080808 68%)}.badge{color:#ff5360;border:1px solid #64131c;background:#26070b;padding:8px 13px;border-radius:99px;font-size:12px;font-weight:bold;display:inline-block}.hero h1{font-size:clamp(48px,8vw,88px);line-height:.9}.hero h1 span{color:#e51b2b}.hero p{color:#aaa;max-width:600px;line-height:1.7}.btn{display:inline-block;background:#e51b2b;color:#fff;border:0;padding:14px 20px;border-radius:10px;font-weight:bold;margin-top:18px;cursor:pointer}
+section{max-width:1200px;margin:auto;padding:70px 6%}.title small{color:#e51b2b;font-weight:bold;letter-spacing:2px}.title h2{font-size:36px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}.card{background:#111;border:1px solid #292929;border-radius:16px;padding:22px}.card:hover{border-color:#e51b2b}.icon{font-size:34px}.card p{color:#999;line-height:1.5;min-height:60px}.price{color:#ff3948;font-size:21px;font-weight:900}.card button{width:100%;margin-top:16px;padding:12px;background:#e51b2b;color:white;border:0;border-radius:9px;font-weight:bold}
+footer{text-align:center;border-top:1px solid #222;padding:40px;color:#777}.drawer{display:none;position:fixed;inset:0;background:#000b;z-index:20}.drawer.open{display:block}.panel{position:absolute;right:0;top:0;width:min(420px,100%);height:100%;background:#0d0d0d;padding:24px}.head{display:flex;justify-content:space-between}.close{background:none;border:0;color:#fff;font-size:25px}.item{padding:15px 0;border-bottom:1px solid #222;display:flex;justify-content:space-between}.wa{width:100%;padding:14px;background:#25d366;color:white;border:0;border-radius:10px;font-weight:bold}
+</style></head><body>
+<header><a class="logo" href="#">RZXYONBLOX<span>.</span></a><button class="cart" onclick="openCart()">🛒 <b id="count">0</b></button></header>
+<main><section class="hero"><div><div class="badge">🎮 ROBLOX SERVICE STORE</div><h1>RZXYON<span>BLOX</span></h1><p>Layanan bantuan akun Roblox dengan proses order yang simpel dan mengikuti prosedur resmi Roblox.</p><a class="btn" href="#layanan">Lihat Layanan</a></div></section>
+<section id="layanan"><div class="title"><small>OUR SERVICES</small><h2>Pilih Layanan</h2></div><div class="grid" id="products"></div></section></main>
+<footer><b>RZXYONBLOX</b><br><br>© <span id="year"></span> RZXYONBLOX Store.</footer>
+<div class="drawer" id="drawer" onclick="if(event.target===this)closeCart()"><div class="panel"><div class="head"><h2>Keranjang</h2><button class="close" onclick="closeCart()">×</button></div><div id="cart"></div><h3 id="total">Rp0</h3><button class="wa" onclick="checkout()">Order via WhatsApp</button></div></div>
+<script>
+const DEFAULT_PRODUCTS=[
+{id:1,icon:"🛡️",name:"Bantuan Akun Roblox",price:5000,desc:"Bantuan umum terkait akun dan fitur resmi Roblox."},
+{id:2,icon:"🎮",name:"Bantuan Pengaturan Akun",price:10000,desc:"Panduan dan bantuan pengaturan akun Roblox."},
+{id:3,icon:"🔧",name:"Bantuan Masalah Akun",price:15000,desc:"Bantuan troubleshooting sesuai prosedur resmi."},
+{id:4,icon:"⭐",name:"Paket Bantuan Premium",price:20000,desc:"Prioritas bantuan dan panduan penggunaan fitur resmi."}];
+const getProducts=()=>JSON.parse(localStorage.getItem("rz_products")||"null")||DEFAULT_PRODUCTS;
+const getWA=()=>localStorage.getItem("rz_whatsapp")||"628979844790";
+let cart=JSON.parse(localStorage.getItem("rz_cart")||"[]");
+const rp=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
+function render(){document.getElementById("products").innerHTML=getProducts().map(p=>`<div class="card"><div class="icon">${p.icon}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${rp(p.price)}</div><button onclick="add(${p.id})">Tambah ke Keranjang</button></div>`).join("")}
+function add(id){let x=cart.find(i=>i.id===id);x?x.qty++:cart.push({id,qty:1});save();renderCart();openCart()}
+function save(){localStorage.setItem("rz_cart",JSON.stringify(cart))}
+function renderCart(){let total=0,count=0,ps=getProducts();document.getElementById("cart").innerHTML=cart.map(i=>{let p=ps.find(x=>x.id===i.id);if(!p)return"";total+=p.price*i.qty;count+=i.qty;return`<div class="item"><span>${p.name} × ${i.qty}</span><button onclick="cart=cart.filter(x=>x.id!==${p.id});save();renderCart()">Hapus</button></div>`}).join("")||"<p style='color:#888'>Keranjang kosong.</p>";document.getElementById("count").textContent=count;document.getElementById("total").textContent=rp(total)}
+function openCart(){document.getElementById("drawer").classList.add("open")}function closeCart(){document.getElementById("drawer").classList.remove("open")}
+function checkout(){if(!cart.length)return alert("Keranjang kosong.");let total=0,ps=getProducts();let lines=cart.map(i=>{let p=ps.find(x=>x.id===i.id);total+=p.price*i.qty;return`- ${p.name} x${i.qty} = ${rp(p.price*i.qty)}`});open("https://wa.me/"+getWA()+"?text="+encodeURIComponent("Halo RZXYONBLOX, saya ingin order:\n\n"+lines.join("\n")+"\n\nTotal: "+rp(total)+"\n\nNama: "))}
+document.getElementById("year").textContent=new Date().getFullYear();render();renderCart();
+</script></body></html>
