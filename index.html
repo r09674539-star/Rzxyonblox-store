@@ -15,10 +15,10 @@ footer{text-align:center;border-top:1px solid #222;padding:40px;color:#777}.draw
 <div class="drawer" id="drawer" onclick="if(event.target===this)closeCart()"><div class="panel"><div class="head"><h2>Keranjang</h2><button class="close" onclick="closeCart()">×</button></div><div id="cart"></div><h3 id="total">Rp0</h3><button class="wa" onclick="checkout()">Order via WhatsApp</button></div></div>
 <script>
 const DEFAULT_PRODUCTS=[
-{id:1,icon:"🛡️",name:"Bantuan Akun Roblox",price:5000,desc:"Bantuan umum terkait akun dan fitur resmi Roblox."},
-{id:2,icon:"🎮",name:"Bantuan Pengaturan Akun",price:10000,desc:"Panduan dan bantuan pengaturan akun Roblox."},
-{id:3,icon:"🔧",name:"Bantuan Masalah Akun",price:15000,desc:"Bantuan troubleshooting sesuai prosedur resmi."},
-{id:4,icon:"⭐",name:"Paket Bantuan Premium",price:20000,desc:"Prioritas bantuan dan panduan penggunaan fitur resmi."}];
+{id:1,icon:"🛡️",name:"Roblox kids ke biasa",price:5000,desc:"Bantuan umum terkait akun dan fitur resmi Roblox."},
+{id:2,icon:"🎮",name:"Roblox select ke biasa",price:10000,desc:"mengubah dari select ke biasa."},
+{id:3,icon:"🔧",name:"ngambil robux",price:3000,desc:"mengambil robux yang harus meminta izin orang tua."},
+
 const getProducts=()=>JSON.parse(localStorage.getItem("rz_products")||"null")||DEFAULT_PRODUCTS;
 const getWA=()=>localStorage.getItem("rz_whatsapp")||"628979844790";
 let cart=JSON.parse(localStorage.getItem("rz_cart")||"[]");
